@@ -26,7 +26,7 @@ The output should be also a file in the format of
 
 - the numbers sorted in an ascending order
 
-and the matching example output file for numbers is [numbers_sorted](https://usfca.instructure.com/courses/1575502/files/64411005/download?verifier=JpBUdWGkFrqFyhrebGOwQO9pt5m2WCfOP4cXBG0C&wrap=1 numbers_sorted). Note that the name of the output file is *\<name of the input file>***_sorted**.
+and the matching example output file for numbers is [numbers_sorted](https://usfca.instructure.com/courses/1575502/files/64411005/download?verifier=JpBUdWGkFrqFyhrebGOwQO9pt5m2WCfOP4cXBG0C&wrap=1 "numbers_sorted"). Note that the name of the output file is *\<name of the input file>***_sorted**.
 
 ## Additional Notes and Requirements
 
