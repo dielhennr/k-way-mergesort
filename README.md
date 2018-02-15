@@ -44,6 +44,6 @@ Your program should print the array at the end of every merge method call. In ot
 	
 ## Submission Details
 
-Upload your file(s) to your github repository. Your repository should look like: `usfcs245/project1-username`. You only need to upload the files for your merge. For example, if your program files are called KMerge.java and Driver.java, you only need to upload these two and not files or directories like src. 
+Upload your file(s) to your github repository. Your repository should look like: `usfcs245/project1-username`. You only need to upload the files for your merge. For example, if your program files are called KMerge.java and Driver.java, you only need to upload these two. 
 
 **Notes:** If you are using eclipse, make sure you either use a **default** package *or* to **remove** the package line before submitting.
