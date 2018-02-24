@@ -1,6 +1,7 @@
 /**
  * 
  */
+import java.util.Arrays;
 
 public class KMerge {
 	int[] numArr;
@@ -12,7 +13,7 @@ public class KMerge {
 		for (int i = 0; i < numArr.length; i++) {
 			this.helperArr[i] = this.numArr[i];
 		}
-		kWayMerge(this.numArr.length/KPartitions, 0, this.numArr.length, KPartitions);
+		KWayMergeSort(KPartitions, 0, this.numArr.length - 1);
 	}
 	public static String toString(int[] arr){
 		String s = "";
@@ -38,77 +39,130 @@ public class KMerge {
 	 * @return void
 	 */
 
-	public void kWayMerge(int sizePartitions, int startPart, int endPart, int KPartitions) {
-
+	public void KWayMergeSort(int KPartitions, int startPart, int endPart) {
 		//length of partition (n)
-		int totalSize = endPart - startPart;
-		
-		for (int length = sizePartitions; length <= totalSize; length*=2){
-			int i = 0;
+		int totalSize = endPart - startPart + 1;
+		int sizePartitions = Math.max(totalSize / KPartitions, 1);
+		int sizeEndPartition = totalSize - (sizePartitions * (KPartitions - 1));
 
-			//either call kwaymerge on the partition, or two way merge with the partitions neighbor.
-			while(i + length < totalSize) {
-
-				int high;
-				if(i+2*length < totalSize){
-					high = i+2*length;
+		if (sizePartitions > 1){
+			for (int i = 0; i < KPartitions; i++) {
+				int newEndPart;
+				if (i == KPartitions - 1) {
+					newEndPart = i*sizePartitions + startPart + sizeEndPartition - 1;
 				}else{
-					high = totalSize;
+					newEndPart = i*sizePartitions + startPart + sizePartitions - 1;
 				}
-				/**
-				 * If the size of a given partition is less than k, we set the new k to the size of that partition
-				 * for the recursive call.
-				 */
-				if (sizePartitions < KPartitions) {
-					KPartitions = sizePartitions;
-				}
+				KWayMergeSort(Math.max(sizePartitions, KPartitions), 
+								i*sizePartitions + startPart, 
+								newEndPart);
+			}
+			KWayMerge(KPartitions, startPart, endPart);
 
-				if (sizePartitions > 1){
-					kWayMerge(Math.max(sizePartitions/KPartitions,1), i, high, KPartitions);
-				}
-				/**
-				 * If the size of a partition is 1, we no longer need to recurse, begin two way merge with
-				 * the partitions neighbor.
-				*/
+		}else {
+			if (sizeEndPartition > 1) {
+				KWayMergeSort(KPartitions, endPart-sizeEndPartition, endPart);
+				KWayMerge(KPartitions + sizeEndPartition, startPart, endPart);
+			}else{
+				KWayMerge(KPartitions, startPart, endPart);
+				
 
-				/*
-
-				*/
-				twoWayMerge(i, i + length, high);
-				i += 2*length;
 			}
 		}
 
 	}
 	
-	public void twoWayMerge(int low, int mid, int high) {
-		int i = low;
-		int j = low;
-		int k = mid;
+	public void KWayMerge(int KPartitions, int low, int high) {
+		/**
+		 * Setup: We need to merge numArr from the index low, to index high. 
+		 * The size of this partition will be high - low + 1 (high and low are indices hence +1).  
+		 * We will partition the given boundry in the array k times (KPartitions).
+		 * Each partition will be of size n/k (high - low + 1)/KPartitions for the first k-1 partitions.
+		 * The last partition will contain the rest of the elements (high - low + 1) - (KPartitions-1)sizePartitions.
+		 */
+		int totalSize = high - low + 1;
+		int sizePartitions = Math.max(totalSize / KPartitions, 1);
 
-		while (i < mid && k < high) {
 
-			if (this.helperArr[i] <= this.helperArr[k]) {	
-				this.numArr[j++] = this.helperArr[i++];
+		int sizeLastPartition = totalSize - sizePartitions*(KPartitions-1);
+		//System.out.printf("Partitions:%d\nlow: %d\nhigh: %d\nsize: %d\n", KPartitions, low, high, totalSize);
 
+		/**
+		 * Consider the case when totalSize is less than KPartitions. This means that we would not be able the partition
+		 * this part of the array into desired amount of partitions. What we can do is partition it into single
+		 * element partitions. In this case we will just call this function again, with the same low/high and the number
+		 * of one element partitions as k.
+		*/
+		if (totalSize < KPartitions) {
+			KWayMerge(totalSize, low, high);
+			return;
+		}
+		/**
+		 * Plan: We now know where each partition is. 
+		 * Lets start by keeping track of the first element in every partition. 
+		 * If we can do this, then we can start to find the minimums of the first
+		 * elements in all the sorted partitions, and we can begin to merge.
+		 */
+
+		int[] indices = new int[KPartitions];
+		int count = low;
+		int min;
+		int currentPart;
+		int minPosition;
+		while (count <= high) {
+
+			//iterate through first element in every partition and find the minimum
+			min = Integer.MAX_VALUE;
+			minPosition = 0;
+			currentPart = low;
+			for (int i = 0; i < KPartitions; i++){
+
+				
+				
+				//The last partition could be smaller or bigger than the rest, if we are done merging elements
+				//in the last partition, break the loop since we dont need to check it.
+				if (i == KPartitions-1 && indices[i] == sizeLastPartition){
+					break;
+				}
+
+				//If we are at the end of a partition, continue. We don't check this if we are in the last partition
+				//This check was preformed above.
+				if (indices[i] == sizePartitions && i != KPartitions - 1){
+					currentPart += sizePartitions;
+					continue;
+				} 
+
+				//we don't want to exceed any normal partition's boundry
+				//if the last partition is larger we must accomidate for it
+				
+
+				//if the partition's current element is less than the min, then set it to be new min. 
+				System.out.println("------");
+				System.out.printf("Comparision\ncurrent min: %d\ncompared to: %d\n", min, helperArr[currentPart + indices[i]]);
+				System.out.printf("i: %d\nindex at ith part: %d val:%d\n", i, indices[i], helperArr[currentPart + indices[i]]);
+				System.out.printf("current part: %d\n", currentPart);
+				if (helperArr[currentPart + indices[i]] < min) {
+					min = helperArr[currentPart + (indices[i])];
+					minPosition = i;
+				}
+				
+				//move to next partition
+				currentPart += sizePartitions;
+				 
 			}
-			else if (this.helperArr[i] > this.helperArr[k]) {
-				this.numArr[j++]= this.helperArr[k++];
-			}
-		}
-
-		while (i < mid) {
-			this.numArr[j++] = this.helperArr[i++];
-		}
-
-		while (k < high) {
-			this.numArr[j++] = this.helperArr[k++];
-		}
-
-		while(low < high) {
-			this.helperArr[low] = this.numArr[low++];
+			//update numArr and move the counter over.
+			numArr[count++] = min;
+			indices[minPosition]++;
+			//System.out.println(min);
+			//System.out.printf("help:   %s\n", Arrays.toString(helperArr));
+			//System.out.printf("actual: %s\n", Arrays.toString(numArr));
 
 		}
 
+		for (int i = low; i <= high; i++) {
+			helperArr[i] = numArr[i];
+		}
 	}
 }
+
+
