@@ -14,16 +14,16 @@ public class KMerge {
 	 * @function Sort
 	 * @purpose instantiate data attributes and start K-Way Merge Sort 
 	 * @param numArr: int array to be sorted
-	 * 		  KPartitions: Number of partitions to partition numArr into
+	 * 		  kPartitions: Number of partitions to partition numArr into
 	 */
 
-	public void sort(int[] numArr, int KPartitions) {
+	public void sort(int[] numArr, int kPartitions) {
 		this.numArr = numArr;
 		this.helperArr = new int[this.numArr.length];
 		for (int i = 0; i < numArr.length; i++) {
 			this.helperArr[i] = this.numArr[i];
 		}
-		KWayMergeSort(KPartitions, 0, this.numArr.length - 1);
+		KWayMergeSort(kPartitions, 0, this.numArr.length - 1);
 	}
 
 	/**
@@ -54,14 +54,14 @@ public class KMerge {
 	 * and then KWayMerge the partitions.
 	 * @param startPart: start index of the partition
 	 *		  endPart: end index of the partition
-	 *		  KPartitions: number of partitions to split given partition into
+	 *		  kPartitions: number of partitions to split given partition into
 	 */
 
-	private void KWayMergeSort(int KPartitions, int startPart, int endPart) {
+	private void KWayMergeSort(int kPartitions, int startPart, int endPart) {
 		//length of boundry (n)
 		int totalSize = endPart - startPart + 1;
-		int sizePartitions = Math.max(totalSize / KPartitions, 1);
-		int sizeEndPartition = totalSize - (sizePartitions * (KPartitions - 1));
+		int sizePartitions = Math.max(totalSize / kPartitions, 1);
+		int sizeEndPartition = totalSize - (sizePartitions * (kPartitions - 1));
 
 		//We must recurse until the size of each partition is 1
 		if (sizePartitions > 1){
@@ -71,17 +71,17 @@ public class KMerge {
 			 * the partition is the last partition. If it is not, then we just add a size of a regular partition 
 			 * to the low index to get the high index. If it is then we add the size of the last partition.
 			 */
-			for (int i = 0; i < KPartitions; i++) {
+			for (int i = 0; i < kPartitions; i++) {
 
 
 				int newEndPart;
-				if (i == KPartitions - 1) {
+				if (i == kPartitions - 1) {
 					newEndPart = i*sizePartitions + startPart + sizeEndPartition - 1;
 				}else{
 					newEndPart = i*sizePartitions + startPart + sizePartitions - 1;
 				}
 				//Recurse for each partition
-				KWayMergeSort(Math.max(sizePartitions, KPartitions), 
+				KWayMergeSort(Math.max(sizePartitions, kPartitions), 
 								i*sizePartitions + startPart, 
 								newEndPart);
 			}
@@ -91,11 +91,12 @@ public class KMerge {
 			//if the size of the end partition is greater than one, recurse with the last partition 
 			//before merging partitions
 			if (sizeEndPartition > 1) {
-				KWayMergeSort(KPartitions, endPart-sizeEndPartition, endPart);
+				KWayMergeSort(kPartitions, endPart-sizeEndPartition, endPart);
 			}
 		}
 		//Once we are done recursing, start merging partitions.
-		KWayMerge(KPartitions, startPart, endPart);
+		KWayMerge(kPartitions, startPart, endPart);
+		System.out.println(Arrays.toString(numArr));
 
 	}
 
@@ -104,27 +105,27 @@ public class KMerge {
 	 * @purpose Merge K sorted partitions of an array.
 	 * @setup We need to merge numArr from the index low, to index high. 
 	 * The size of this partition will be high - low + 1 (high and low are indices hence +1).  
-	 * We will partition the given boundry in the array k times (KPartitions).
-	 * Each partition will be of size n/k (high - low + 1)/KPartitions for the first k-1 partitions.
-	 * The last partition will contain the rest of the elements (high - low + 1) - (KPartitions-1)sizePartitions.
-	 * @param KPartitions: number of partitions to partition given boundry into
+	 * We will partition the given boundry in the array k times (kPartitions).
+	 * Each partition will be of size n/k (high - low + 1)/kPartitions for the first k-1 partitions.
+	 * The last partition will contain the rest of the elements (high - low + 1) - (kPartitions-1)sizePartitions.
+	 * @param kPartitions: number of partitions to partition given boundry into
 	 *        low: low index of boundry 
 	 *		  high: high index of boundry
 	 */
 	
-	private void KWayMerge(int KPartitions, int low, int high) {
+	private void KWayMerge(int kPartitions, int low, int high) {
 		
 		int totalSize = high - low + 1;
-		int sizePartitions = Math.max(totalSize / KPartitions, 1);
-		int sizeLastPartition = totalSize - sizePartitions*(KPartitions-1);
+		int sizePartitions = Math.max(totalSize / kPartitions, 1);
+		int sizeLastPartition = totalSize - sizePartitions*(kPartitions-1);
 
 		/**
-		 * Consider the case when totalSize is less than KPartitions. This means that we would not be able the partition
+		 * Consider the case when totalSize is less than kPartitions. This means that we would not be able the partition
 		 * this part of the array into desired amount of partitions. What we can do is partition it into n (totalSize) 
 		 * single element partitions. In this case we will just call this function again, with the same low/high and the number
 		 * of one element partitions as k.
 		*/
-		if (totalSize < KPartitions) {
+		if (totalSize < kPartitions) {
 			KWayMerge(totalSize, low, high);
 			return;
 		}
@@ -135,7 +136,7 @@ public class KMerge {
 		 * elements in all the sorted partitions, and we can begin to merge.
 		 */
 
-		int[] indices = new int[KPartitions];
+		int[] indices = new int[kPartitions];
 
 		 
 		int count = low;
@@ -149,20 +150,20 @@ public class KMerge {
 			min = Integer.MAX_VALUE;
 			minPosition = 0;
 			currentPart = low;
-			for (int i = 0; i < KPartitions; i++){
+			for (int i = 0; i < kPartitions; i++){
 
 				
 				
 				//The last partition could be smaller or bigger than the rest, if we are done merging elements
 				//in the last partition, break the loop since we dont need to check it.
-				if (i == KPartitions-1 && indices[i] == sizeLastPartition){
+				if (i == kPartitions-1 && indices[i] == sizeLastPartition){
 					break;
 				}
 
 				//If we are at the end of a partition, continue. Don't want to exceed any normal partition's boundry
 				//We don't check this if we are in the last partition
 				//This check was preformed above.
-				if (indices[i] == sizePartitions && i != KPartitions - 1){
+				if (indices[i] == sizePartitions && i != kPartitions - 1){
 					currentPart += sizePartitions;
 					continue;
 				} 
