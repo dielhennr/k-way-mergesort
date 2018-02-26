@@ -3,6 +3,7 @@ import java.util.Arrays;
 
 /**
  * A class that sorts an input array using K-Way Merge Sort.  
+ * @author dielhennr
  */
 public class KMerge {
 

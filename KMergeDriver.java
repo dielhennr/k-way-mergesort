@@ -8,6 +8,7 @@ import java.util.Scanner;
 /**
  * A class that reads in a file of (\n) separated integers, sorts them using K Way Merge Sort, 
  * and writes the output to a new file.
+ * @author dielhennr
  */
 
 public class KMergeDriver {
