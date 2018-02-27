@@ -82,7 +82,7 @@ public class KMerge {
 					newEndPart = i*sizePartitions + startPart + sizePartitions - 1;
 				}
 				//Recurse for each partition
-				KWayMergeSort(Math.max(sizePartitions, kPartitions), 
+				KWayMergeSort(kPartitions, 
 								i*sizePartitions + startPart, 
 								newEndPart);
 			}
