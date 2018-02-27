@@ -128,7 +128,6 @@ public class KMerge {
 		*/
 		if (totalSize < kPartitions) {
 			KWayMerge(totalSize, low, high);
-			System.out.println(Arrays.toString(numArr));
 			return;
 		}
 		/**

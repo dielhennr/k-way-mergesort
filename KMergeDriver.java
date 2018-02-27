@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.FileWriter;
+import java.util.NoSuchElementException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -41,7 +42,6 @@ public class KMergeDriver {
 			for (int i = 0; i < count; i++) {
 				numbers[i] = scan1.nextInt();
 			}
-			scan1.close();
 			
 
 			//sort array
@@ -63,11 +63,13 @@ public class KMergeDriver {
 
 
 
-		} catch (FileNotFoundException | InputMismatchException e) {
+		} catch (FileNotFoundException | NoSuchElementException e) {
 			if (e instanceof InputMismatchException){
 				System.out.println("Error: Non-Integer element in file.");
-			}else{
+			}else if (e instanceof FileNotFoundException){
 				System.out.println("File not found.");
+			}else{
+				System.out.println("Error: whitespace at the end of file.");
 			}
 			System.out.print("\nStack Trace:\n");
 			e.printStackTrace();
