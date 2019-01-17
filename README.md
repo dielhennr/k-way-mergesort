@@ -1,7 +1,4 @@
 # Project 1
-
-The description for this project can be found on Canvas. For convenience, the description is also listed here.
-
 ## Description
 
 Your first programming project is to implement k-way merge sort for any `k>=2`, using *only* int arrays. You may *not* use Lists, ArrayLists, or Collections.  You may use Arrays class to print the content of the array. For the full credit, you may *not* create more than one int array. In your source code, _explain how you implemented k-way merge in comments_ right above your merge method. Submission is through your github repository.
@@ -37,13 +34,5 @@ For any input size that is *not* divisible by k, you will split the list to (k-1
 Your program should print the array at the end of every merge method call. In other words, if the input is [4, 2, 6, 1] for 2-way merge, then the program should print:
 
 	[2, 4, 6, 1]
-
 	[2, 4, 1, 6]
-	
 	[1, 2, 4, 6]
-	
-## Submission Details
-
-Upload your file(s) to your github repository. Your repository should look like: `usfcs245/project1-username`. You only need to upload the files for your merge. For example, if your program files are called KMerge.java and Driver.java, you only need to upload these two. 
-
-**Notes:** If you are using eclipse, make sure you either use a **default** package *or* to **remove** the package line before submitting.
