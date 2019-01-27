@@ -1,4 +1,4 @@
-# Code written in Spring 2018
+# Code Written in Spring 2018
 
 # Project 1
 ## Description
