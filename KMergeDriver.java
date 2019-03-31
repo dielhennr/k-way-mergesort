@@ -1,79 +1,77 @@
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 import java.util.InputMismatchException;
-import java.util.Scanner;
 
 /**
- * A class that reads in a file of (\n) separated integers, sorts them using K Way Merge Sort, 
- * and writes the output to a new file.
- * @author dielhennr
+ * A class that reads in a file of newline separated integers, sorts them using
+ * K Way Merge Sort, and writes the output to a new file.
+ * 
+ * @author Ryan Dielhenn
  */
 
 public class KMergeDriver {
 
+	/**
+	 * Reads a file of newline separated integers, sorts them with K-Way merge sort
+	 * and outputs the sorted integers to a file
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
-		//Validate input
+		/** Validate input */
 		if (args.length != 1) {
-			System.out.println("Usage: java KMergeDriver <file.txt>");
+			System.err.println("Usage: java KMergeDriver <file.txt>");
 			System.exit(0);
 		}
 
-		File file = new File(args[0]);
+		Path file = Paths.get(args[0]);
 
-		//Process the file
-		try (Scanner scan = new Scanner(file)) {
-			//count values
-			scan.nextLine();
+		/** Process the file */
+		try (BufferedReader counter = Files.newBufferedReader(file)) {
+			/** Count values */
+			counter.readLine();
 			int count = 0;
-			while (scan.hasNextLine()) {
+			while (counter.readLine() != null) {
 				count++;
-				scan.nextLine();
-			}
-
-			Scanner scan1 = new Scanner(file);
-			//read values into array
-			int k = scan1.nextInt();
-			int[] numbers = new int[count];
-			String strNum;
-			for (int i = 0; i < count; i++) {
-				numbers[i] = scan1.nextInt();
 			}
 			
+			BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8);
+			/** Read values into array */
+			int k = Integer.parseInt(reader.readLine().strip());
+			int[] numbers = new int[count];
+			for (int i = 0; i < count; i++) {
+				numbers[i] = Integer.parseInt(reader.readLine().strip());
+			}
 
-			//sort array
+			/** Sort Array */
 			KMerge merger = new KMerge();
 			merger.sort(numbers, k);
 
-			//write output to a new file
-			try{
-				File outFile = new File(args[0] + "_sorted");
-				outFile.createNewFile();
-				FileWriter writer = new FileWriter(outFile); 
-				writer.write(merger.toString(numbers)); 
-				writer.flush();
-				writer.close();
-			}catch (IOException ioe) {
-				System.out.println("Error: Writing output to file");
-				ioe.printStackTrace();
+			/** Write output to a new file */
+			Path outFile = Paths.get(file + "_sorted");
+			try (BufferedWriter writer = Files.newBufferedWriter(outFile, StandardCharsets.UTF_8)) {
+				writer.write(merger.toString(numbers));
+			} catch (IOException ioe) {
+				System.err.println("Error: Writing output to file: " + outFile);
 			}
 
-
-
-		} catch (FileNotFoundException | NoSuchElementException e) {
-			if (e instanceof InputMismatchException){
-				System.out.println("Error: Non-Integer element in file.");
-			}else if (e instanceof FileNotFoundException){
-				System.out.println("File not found.");
-			}else{
-				System.out.println("Error: whitespace at the end of file.");
+		} catch (NoSuchElementException | IOException e) {
+			if (e instanceof InputMismatchException) {
+				System.err.println("Error: Non-Integer element in file.");
+			} else if (e instanceof FileNotFoundException) {
+				System.err.println("File not found.");
+			} else {
+				System.err.println("Error: whitespace at the end of file.");
+				e.printStackTrace();
 			}
-			System.out.print("\nStack Trace:\n");
-			e.printStackTrace();
-			System.exit(0);
 		}
 	}
 }
